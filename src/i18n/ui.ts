@@ -48,6 +48,11 @@ export const ui = {
     'notfound.title': 'Seite nicht gefunden',
     'notfound.text': 'Die angeforderte Seite existiert nicht oder wurde verschoben.',
     'notfound.back': 'Zur Startseite',
+    'carousel.prev': 'Vorheriges Bild',
+    'carousel.next': 'Nächstes Bild',
+    'about.gallery.rooms': 'Unsere Räume',
+    'about.gallery.doctor': 'Dr. med. Tatiana Makosz',
+    'home.about.more': 'Mehr über uns',
   },
   en: {
     'nav.home': 'Home',
@@ -88,6 +93,11 @@ export const ui = {
     'notfound.title': 'Page not found',
     'notfound.text': 'The requested page does not exist or has been moved.',
     'notfound.back': 'Back to homepage',
+    'carousel.prev': 'Previous image',
+    'carousel.next': 'Next image',
+    'about.gallery.rooms': 'Our practice rooms',
+    'about.gallery.doctor': 'Dr. med. Tatiana Makosz',
+    'home.about.more': 'More about us',
   },
   fr: {
     'nav.home': 'Accueil',
@@ -128,6 +138,11 @@ export const ui = {
     'notfound.title': 'Page introuvable',
     'notfound.text': 'La page demandée n’existe pas ou a été déplacée.',
     'notfound.back': 'Retour à l’accueil',
+    'carousel.prev': 'Image précédente',
+    'carousel.next': 'Image suivante',
+    'about.gallery.rooms': 'Nos locaux',
+    'about.gallery.doctor': 'Dr. med. Tatiana Makosz',
+    'home.about.more': 'En savoir plus sur nous',
   },
 } as const;
 

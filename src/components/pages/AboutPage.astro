@@ -1,0 +1,35 @@
+---
+import Base from '../../layouts/Base.astro';
+import Carousel from '../Carousel.astro';
+import { getEntry, render } from 'astro:content';
+import { useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const page = await getEntry('pages', `${lang}/ueber-uns`);
+if (!page) throw new Error(`Über-uns-Seite fehlt für Sprache ${lang}`);
+const { Content } = await render(page);
+
+const introParagraphs = (page.data.intro ?? '').split('\n\n').map((p) => p.trim()).filter(Boolean);
+---
+<Base title={page.data.title} description={page.data.description}>
+  <div class="quadrants">
+    <div class="quadrant quadrant--text quadrant--beige">
+      <h1>{page.data.title}</h1>
+      {introParagraphs.map((p) => <p class="quadrant__lead" set:html={p.replace(/\n/g, '<br />')} />)}
+    </div>
+    <div class="quadrant quadrant--media">
+      <Carousel slides={page.data.galleryRooms ?? []} label={t('about.gallery.rooms')} lang={lang} />
+    </div>
+    <div class="quadrant quadrant--media">
+      <Carousel slides={page.data.galleryDoctor ?? []} label={t('about.gallery.doctor')} lang={lang} />
+    </div>
+    <div class="quadrant quadrant--text quadrant--hell lebenslauf">
+      <Content />
+    </div>
+  </div>
+</Base>

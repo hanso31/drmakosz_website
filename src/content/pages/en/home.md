@@ -4,6 +4,8 @@ pageId: "home"
 title: "Dermatology & Aesthetics in Basel"
 description: "Dermatology practice Dr. med. T. Makosz in Basel: dermatology, dermatological surgery, laser therapy, allergology, phlebology, proctology and aesthetic medicine."
 heroImage: "/images/startseite-hero.webp"
+sideImage: "/images/Sony-6513-Bearbeitet-Bearbeitet_F.jpg"
+sideAlt: "Dr. med. Tatiana Makosz in her practice in Basel"
 heroAlt: "Reception area of the dermatology practice at Aeschenvorstadt 21, Basel"
 ---
 

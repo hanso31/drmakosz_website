@@ -4,6 +4,8 @@ pageId: "home"
 title: "Dermatologie & esthétique à Bâle"
 description: "Cabinet de dermatologie Dr. med. T. Makosz à Bâle : dermatologie, dermatochirurgie, traitement au laser, allergologie, phlébologie, proctologie et médecine esthétique."
 heroImage: "/images/startseite-hero.webp"
+sideImage: "/images/Sony-6513-Bearbeitet-Bearbeitet_F.jpg"
+sideAlt: "Dr. med. Tatiana Makosz dans son cabinet à Bâle"
 heroAlt: "Réception du cabinet de dermatologie, Aeschenvorstadt 21, Bâle"
 ---
 

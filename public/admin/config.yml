@@ -112,6 +112,23 @@ collections:
       - { label: Kurzbeschreibung (SEO), name: description, widget: text }
       - { label: Titelbild, name: heroImage, widget: image, required: false }
       - { label: Bild-Alt-Text, name: heroAlt, widget: string, required: false }
+      - { label: 'Einleitungstext (nur „Über uns“)', name: intro, widget: text, required: false, hint: 'Kurze Vorstellung, erscheint im beigen Feld oben links' }
+      - { label: 'Portrait neben Willkommenstext (nur Startseite)', name: sideImage, widget: image, required: false }
+      - { label: 'Alt-Text Portrait (nur Startseite)', name: sideAlt, widget: string, required: false }
+      - label: 'Galerie Räume (nur „Über uns“)'
+        name: galleryRooms
+        widget: list
+        required: false
+        fields:
+          - { label: Bild, name: image, widget: image }
+          - { label: Alt-Text, name: alt, widget: string }
+      - label: 'Galerie Ärztin (nur „Über uns“)'
+        name: galleryDoctor
+        widget: list
+        required: false
+        fields:
+          - { label: Bild, name: image, widget: image }
+          - { label: Alt-Text, name: alt, widget: string }
       - { label: Text, name: body, widget: markdown }
 
   - name: seiten-en
@@ -137,6 +154,23 @@ collections:
       - { label: Kurzbeschreibung (SEO, EN), name: description, widget: text }
       - { label: Titelbild, name: heroImage, widget: image, required: false }
       - { label: Bild-Alt-Text (EN), name: heroAlt, widget: string, required: false }
+      - { label: 'Einleitungstext (nur „Über uns“)', name: intro, widget: text, required: false, hint: 'Kurze Vorstellung, erscheint im beigen Feld oben links' }
+      - { label: 'Portrait neben Willkommenstext (nur Startseite)', name: sideImage, widget: image, required: false }
+      - { label: 'Alt-Text Portrait (nur Startseite)', name: sideAlt, widget: string, required: false }
+      - label: 'Galerie Räume (nur „Über uns“)'
+        name: galleryRooms
+        widget: list
+        required: false
+        fields:
+          - { label: Bild, name: image, widget: image }
+          - { label: Alt-Text, name: alt, widget: string }
+      - label: 'Galerie Ärztin (nur „Über uns“)'
+        name: galleryDoctor
+        widget: list
+        required: false
+        fields:
+          - { label: Bild, name: image, widget: image }
+          - { label: Alt-Text, name: alt, widget: string }
       - { label: Text (EN), name: body, widget: markdown }
 
   - name: seiten-fr
@@ -162,6 +196,23 @@ collections:
       - { label: Kurzbeschreibung (SEO, FR), name: description, widget: text }
       - { label: Titelbild, name: heroImage, widget: image, required: false }
       - { label: Bild-Alt-Text (FR), name: heroAlt, widget: string, required: false }
+      - { label: 'Einleitungstext (nur „Über uns“)', name: intro, widget: text, required: false, hint: 'Kurze Vorstellung, erscheint im beigen Feld oben links' }
+      - { label: 'Portrait neben Willkommenstext (nur Startseite)', name: sideImage, widget: image, required: false }
+      - { label: 'Alt-Text Portrait (nur Startseite)', name: sideAlt, widget: string, required: false }
+      - label: 'Galerie Räume (nur „Über uns“)'
+        name: galleryRooms
+        widget: list
+        required: false
+        fields:
+          - { label: Bild, name: image, widget: image }
+          - { label: Alt-Text, name: alt, widget: string }
+      - label: 'Galerie Ärztin (nur „Über uns“)'
+        name: galleryDoctor
+        widget: list
+        required: false
+        fields:
+          - { label: Bild, name: image, widget: image }
+          - { label: Alt-Text, name: alt, widget: string }
       - { label: Text (FR), name: body, widget: markdown }
 
   # -------------------------------------------------------------------- News

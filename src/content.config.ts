@@ -18,6 +18,11 @@ const leistungen = defineCollection({
   }),
 });
 
+const galleryItem = z.object({
+  image: z.string(),
+  alt: z.string(),
+});
+
 const pages = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/pages' }),
   schema: z.object({
@@ -26,6 +31,13 @@ const pages = defineCollection({
     title: z.string(),
     description: z.string(),
     ...imageFields,
+    // Startseite: Portrait neben dem Willkommens-Text
+    sideImage: z.string().optional(),
+    sideAlt: z.string().optional(),
+    // Über uns: Einleitung + getrennte Galerien für Räume und Ärztin
+    intro: z.string().optional(),
+    galleryRooms: z.array(galleryItem).optional(),
+    galleryDoctor: z.array(galleryItem).optional(),
   }),
 });
 

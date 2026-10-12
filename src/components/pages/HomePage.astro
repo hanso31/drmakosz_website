@@ -26,10 +26,16 @@ const schoenheit = await byCategory('schoenheit');
 <Base title={page.data.title} description={page.data.description} image={page.data.heroImage}>
   <Hero title={page.data.title} subtitle={page.data.description} image={page.data.heroImage} imageAlt={page.data.heroAlt} />
 
-  <div class="container section">
-    <div class="prose">
+  <div class="quadrants">
+    <div class="quadrant quadrant--text quadrant--beige prose">
       <Content />
+      <p style="margin-top: 1.5rem;"><a class="button button--outline" href={localePath(lang, '/ueber-uns/')}>{t('home.about.more')}</a></p>
     </div>
+    {page.data.sideImage && (
+      <div class="quadrant quadrant--media">
+        <img src={page.data.sideImage} alt={page.data.sideAlt ?? ''} width="1920" height="1254" loading="lazy" />
+      </div>
+    )}
   </div>
 
   <div class="section section--alt">
