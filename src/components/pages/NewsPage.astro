@@ -1,0 +1,62 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+import { useTranslations, localePath, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  slug?: string;
+}
+
+const { lang, slug } = Astro.props;
+const t = useTranslations(lang);
+const slugOf = (id: string) => id.split('/').pop();
+
+const posts = (await getCollection('news', ({ data }) => data.lang === lang && data.published))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+let detail = null;
+let DetailContent = null;
+if (slug) {
+  detail = posts.find((p) => slugOf(p.id) === slug) ?? null;
+  if (detail) {
+    const rendered = await render(detail);
+    DetailContent = rendered.Content;
+  }
+}
+
+const dateFmt = new Intl.DateTimeFormat(lang, { dateStyle: 'long' });
+---
+<Base
+  title={detail ? detail.data.title : t('news.title')}
+  description={detail ? detail.data.description : t('news.title')}
+>
+  <div class="container section">
+    {detail ? (
+      <article class="prose">
+        <h1>{detail.data.title}</h1>
+        <p><time datetime={detail.data.date.toISOString()}>{dateFmt.format(detail.data.date)}</time></p>
+        {detail.data.heroImage && <img src={detail.data.heroImage} alt={detail.data.heroAlt ?? ''} width="1200" height="675" loading="lazy" />}
+        {DetailContent && <DetailContent />}
+      </article>
+    ) : (
+      <>
+        <h1>{t('news.title')}</h1>
+        {posts.length === 0 ? (
+          <p>{t('news.empty')}</p>
+        ) : (
+          <ul class="news-list">
+            {posts.map((p) => (
+              <li>
+                <time datetime={p.data.date.toISOString()}>{dateFmt.format(p.data.date)}</time>
+                <h2>{p.data.title}</h2>
+                <p>{p.data.description}</p>
+                <a href={localePath(lang, `/news/${slugOf(p.id)}/`)}>{t('news.readmore')}</a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </>
+    )}
+  </div>
+</Base>

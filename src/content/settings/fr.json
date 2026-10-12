@@ -1,0 +1,23 @@
+{
+  "lang": "fr",
+  "practiceName": "Cabinet de dermatologie Dr. med. T. Makosz",
+  "doctorName": "Dr. med. T. Makosz",
+  "specialty": "FMH Dermatologie & Vénéréologie",
+  "street": "Aeschenvorstadt 21",
+  "zipCity": "CH-4051 Basel",
+  "phone": "+41 61 271 15 16",
+  "phoneMobile": "+41 79 503 51 98",
+  "fax": "+41 61 271 15 17",
+  "email": "team@dermatologe-basel.ch",
+  "hours": [
+    {
+      "days": "Lundi au vendredi",
+      "time": "08h00 – 13h00"
+    },
+    {
+      "days": "Lundi au mercredi & vendredi",
+      "time": "14h00 – 18h00"
+    }
+  ],
+  "hoursNote": "Nous convenons volontiers d’un rendez-vous de consultation avec vous. En cas d’urgence, vous pouvez également nous consulter sans rendez-vous."
+}

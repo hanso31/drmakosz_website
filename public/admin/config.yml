@@ -1,0 +1,282 @@
+# Decap CMS Konfiguration – dermatologe-basel.ch
+# Backend: GitHub. Voraussetzung: OAuth-App bzw. Netlify-Identity-freier OAuth-Client.
+# Siehe README.md → „Decap CMS einrichten“ für die komplette Anleitung.
+
+backend:
+  name: github
+  repo: hanso31/drmakosz_website
+  branch: main
+  # OAuth über den quelloffenen decap-cms-oauth Provider (Cloudflare Worker).
+  # Nach dem Einrichten die eigene URL eintragen (siehe README):
+  base_url: https://decap-oauth.example.workers.dev
+
+# Sprache der Admin-Oberfläche
+locale: de
+
+# Bilder landen in public/images und werden unter /images/... referenziert
+media_folder: public/images
+public_folder: /images
+
+# Redaktioneller Workflow: Änderungen werden als Entwurf/Pull Request gespeichert
+publish_mode: editorial_workflow
+
+site_url: https://www.dermatologe-basel.ch
+logo_url: /images/logo.svg
+
+collections:
+  # ---------------------------------------------------------------- Leistungen
+  - name: leistungen-de
+    label: Leistungen (Deutsch)
+    label_singular: Leistung
+    folder: src/content/leistungen/de
+    create: true
+    slug: '{{slug}}'
+    fields:
+      - { label: Sprache, name: lang, widget: hidden, default: de }
+      - { label: Titel, name: title, widget: string, hint: 'Name der Leistung, z. B. „Akne“' }
+      - label: Kategorie
+        name: category
+        widget: select
+        options:
+          - { label: Erkrankungen, value: erkrankungen }
+          - { label: Schönheit, value: schoenheit }
+      - { label: Kurzbeschreibung (SEO), name: description, widget: text, hint: 'Wird in Google angezeigt. Max. ca. 160 Zeichen.' }
+      - { label: Reihenfolge, name: order, widget: number, default: 99, hint: 'Position in der Übersicht (kleinere Zahl = weiter oben)' }
+      - { label: Titelbild, name: heroImage, widget: image, required: false }
+      - { label: Bild-Alt-Text, name: heroAlt, widget: string, required: false, hint: 'Beschreibt das Bild für Screenreader und Google' }
+      - { label: Text, name: body, widget: markdown }
+
+  - name: leistungen-en
+    label: Leistungen (English)
+    label_singular: Leistung (EN)
+    folder: src/content/leistungen/en
+    create: true
+    slug: '{{slug}}'
+    fields:
+      - { label: Sprache, name: lang, widget: hidden, default: en }
+      - { label: Titel (EN), name: title, widget: string }
+      - label: Kategorie
+        name: category
+        widget: select
+        options:
+          - { label: Erkrankungen, value: erkrankungen }
+          - { label: Schönheit, value: schoenheit }
+      - { label: Kurzbeschreibung (SEO, EN), name: description, widget: text }
+      - { label: Reihenfolge, name: order, widget: number, default: 99 }
+      - { label: Titelbild, name: heroImage, widget: image, required: false }
+      - { label: Bild-Alt-Text (EN), name: heroAlt, widget: string, required: false }
+      - { label: Text (EN), name: body, widget: markdown }
+
+  - name: leistungen-fr
+    label: Leistungen (Français)
+    label_singular: Leistung (FR)
+    folder: src/content/leistungen/fr
+    create: true
+    slug: '{{slug}}'
+    fields:
+      - { label: Sprache, name: lang, widget: hidden, default: fr }
+      - { label: Titel (FR), name: title, widget: string }
+      - label: Kategorie
+        name: category
+        widget: select
+        options:
+          - { label: Erkrankungen, value: erkrankungen }
+          - { label: Schönheit, value: schoenheit }
+      - { label: Kurzbeschreibung (SEO, FR), name: description, widget: text }
+      - { label: Reihenfolge, name: order, widget: number, default: 99 }
+      - { label: Titelbild, name: heroImage, widget: image, required: false }
+      - { label: Bild-Alt-Text (FR), name: heroAlt, widget: string, required: false }
+      - { label: Text (FR), name: body, widget: markdown }
+
+  # ------------------------------------------------------------------- Seiten
+  - name: seiten-de
+    label: Seiten (Deutsch)
+    folder: src/content/pages/de
+    create: false
+    slug: '{{slug}}'
+    fields:
+      - { label: Sprache, name: lang, widget: hidden, default: de }
+      - label: Seite
+        name: pageId
+        widget: select
+        options:
+          - { label: Startseite, value: home }
+          - { label: Über uns, value: ueber-uns }
+          - { label: Kontakt, value: kontakt }
+          - { label: Erkrankungen (Übersicht), value: erkrankungen }
+          - { label: Schönheit (Übersicht), value: schoenheit }
+          - { label: Impressum, value: impressum }
+          - { label: Datenschutz, value: datenschutz }
+          - { label: Bildquellen, value: bildquellen }
+      - { label: Titel, name: title, widget: string }
+      - { label: Kurzbeschreibung (SEO), name: description, widget: text }
+      - { label: Titelbild, name: heroImage, widget: image, required: false }
+      - { label: Bild-Alt-Text, name: heroAlt, widget: string, required: false }
+      - { label: Text, name: body, widget: markdown }
+
+  - name: seiten-en
+    label: Seiten (English)
+    folder: src/content/pages/en
+    create: false
+    slug: '{{slug}}'
+    fields:
+      - { label: Sprache, name: lang, widget: hidden, default: en }
+      - label: Seite
+        name: pageId
+        widget: select
+        options:
+          - { label: Startseite, value: home }
+          - { label: Über uns, value: ueber-uns }
+          - { label: Kontakt, value: kontakt }
+          - { label: Erkrankungen (Übersicht), value: erkrankungen }
+          - { label: Schönheit (Übersicht), value: schoenheit }
+          - { label: Impressum, value: impressum }
+          - { label: Datenschutz, value: datenschutz }
+          - { label: Bildquellen, value: bildquellen }
+      - { label: Titel (EN), name: title, widget: string }
+      - { label: Kurzbeschreibung (SEO, EN), name: description, widget: text }
+      - { label: Titelbild, name: heroImage, widget: image, required: false }
+      - { label: Bild-Alt-Text (EN), name: heroAlt, widget: string, required: false }
+      - { label: Text (EN), name: body, widget: markdown }
+
+  - name: seiten-fr
+    label: Seiten (Français)
+    folder: src/content/pages/fr
+    create: false
+    slug: '{{slug}}'
+    fields:
+      - { label: Sprache, name: lang, widget: hidden, default: fr }
+      - label: Seite
+        name: pageId
+        widget: select
+        options:
+          - { label: Startseite, value: home }
+          - { label: Über uns, value: ueber-uns }
+          - { label: Kontakt, value: kontakt }
+          - { label: Erkrankungen (Übersicht), value: erkrankungen }
+          - { label: Schönheit (Übersicht), value: schoenheit }
+          - { label: Impressum, value: impressum }
+          - { label: Datenschutz, value: datenschutz }
+          - { label: Bildquellen, value: bildquellen }
+      - { label: Titel (FR), name: title, widget: string }
+      - { label: Kurzbeschreibung (SEO, FR), name: description, widget: text }
+      - { label: Titelbild, name: heroImage, widget: image, required: false }
+      - { label: Bild-Alt-Text (FR), name: heroAlt, widget: string, required: false }
+      - { label: Text (FR), name: body, widget: markdown }
+
+  # -------------------------------------------------------------------- News
+  - name: news-de
+    label: Aktuelles (Deutsch)
+    label_singular: Beitrag
+    folder: src/content/news/de
+    create: true
+    slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
+    fields:
+      - { label: Sprache, name: lang, widget: hidden, default: de }
+      - { label: Titel, name: title, widget: string }
+      - { label: Kurzbeschreibung, name: description, widget: text }
+      - { label: Datum, name: date, widget: datetime, date_format: DD.MM.YYYY, time_format: false }
+      - { label: Veröffentlicht, name: published, widget: boolean, default: false, hint: 'Erst wenn aktiv, erscheint der Beitrag auf der Website' }
+      - { label: Bild, name: heroImage, widget: image, required: false }
+      - { label: Bild-Alt-Text, name: heroAlt, widget: string, required: false }
+      - { label: Text, name: body, widget: markdown }
+
+  - name: news-en
+    label: Aktuelles (English)
+    label_singular: Beitrag (EN)
+    folder: src/content/news/en
+    create: true
+    slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
+    fields:
+      - { label: Sprache, name: lang, widget: hidden, default: en }
+      - { label: Titel (EN), name: title, widget: string }
+      - { label: Kurzbeschreibung (EN), name: description, widget: text }
+      - { label: Datum, name: date, widget: datetime, date_format: DD.MM.YYYY, time_format: false }
+      - { label: Veröffentlicht, name: published, widget: boolean, default: false }
+      - { label: Bild, name: heroImage, widget: image, required: false }
+      - { label: Bild-Alt-Text (EN), name: heroAlt, widget: string, required: false }
+      - { label: Text (EN), name: body, widget: markdown }
+
+  - name: news-fr
+    label: Aktuelles (Français)
+    label_singular: Beitrag (FR)
+    folder: src/content/news/fr
+    create: true
+    slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
+    fields:
+      - { label: Sprache, name: lang, widget: hidden, default: fr }
+      - { label: Titel (FR), name: title, widget: string }
+      - { label: Kurzbeschreibung (FR), name: description, widget: text }
+      - { label: Datum, name: date, widget: datetime, date_format: DD.MM.YYYY, time_format: false }
+      - { label: Veröffentlicht, name: published, widget: boolean, default: false }
+      - { label: Bild, name: heroImage, widget: image, required: false }
+      - { label: Bild-Alt-Text (FR), name: heroAlt, widget: string, required: false }
+      - { label: Text (FR), name: body, widget: markdown }
+
+  # ------------------------------------------------- Praxis-Daten (Kontakt etc.)
+  - name: praxis
+    label: Praxis-Daten
+    files:
+      - name: praxis-de
+        label: Kontakt & Sprechstunden (Deutsch)
+        file: src/content/settings/de.json
+        fields:
+          - { label: Sprache, name: lang, widget: hidden, default: de }
+          - { label: Praxisname, name: practiceName, widget: string }
+          - { label: Ärztin/Arzt, name: doctorName, widget: string }
+          - { label: Fachgebiet, name: specialty, widget: string }
+          - { label: Strasse, name: street, widget: string }
+          - { label: PLZ & Ort, name: zipCity, widget: string }
+          - { label: Telefon, name: phone, widget: string }
+          - { label: Mobil, name: phoneMobile, widget: string }
+          - { label: Fax, name: fax, widget: string }
+          - { label: E-Mail, name: email, widget: string }
+          - label: Sprechstunden
+            name: hours
+            widget: list
+            fields:
+              - { label: Tage, name: days, widget: string, hint: 'z. B. „Montag bis Freitag“' }
+              - { label: Uhrzeit, name: time, widget: string, hint: 'z. B. „08.00 – 13.00 Uhr“' }
+          - { label: Hinweis zu den Sprechstunden, name: hoursNote, widget: text }
+      - name: praxis-en
+        label: Kontakt & Sprechstunden (English)
+        file: src/content/settings/en.json
+        fields:
+          - { label: Sprache, name: lang, widget: hidden, default: en }
+          - { label: Praxisname (EN), name: practiceName, widget: string }
+          - { label: Ärztin/Arzt, name: doctorName, widget: string }
+          - { label: Fachgebiet (EN), name: specialty, widget: string }
+          - { label: Strasse, name: street, widget: string }
+          - { label: PLZ & Ort, name: zipCity, widget: string }
+          - { label: Telefon, name: phone, widget: string }
+          - { label: Mobil, name: phoneMobile, widget: string }
+          - { label: Fax, name: fax, widget: string }
+          - { label: E-Mail, name: email, widget: string }
+          - label: Sprechstunden (EN)
+            name: hours
+            widget: list
+            fields:
+              - { label: Tage, name: days, widget: string }
+              - { label: Uhrzeit, name: time, widget: string }
+          - { label: Hinweis zu den Sprechstunden (EN), name: hoursNote, widget: text }
+      - name: praxis-fr
+        label: Kontakt & Sprechstunden (Français)
+        file: src/content/settings/fr.json
+        fields:
+          - { label: Sprache, name: lang, widget: hidden, default: fr }
+          - { label: Praxisname (FR), name: practiceName, widget: string }
+          - { label: Ärztin/Arzt, name: doctorName, widget: string }
+          - { label: Fachgebiet (FR), name: specialty, widget: string }
+          - { label: Strasse, name: street, widget: string }
+          - { label: PLZ & Ort, name: zipCity, widget: string }
+          - { label: Telefon, name: phone, widget: string }
+          - { label: Mobil, name: phoneMobile, widget: string }
+          - { label: Fax, name: fax, widget: string }
+          - { label: E-Mail, name: email, widget: string }
+          - label: Sprechstunden (FR)
+            name: hours
+            widget: list
+            fields:
+              - { label: Tage, name: days, widget: string }
+              - { label: Uhrzeit, name: time, widget: string }
+          - { label: Hinweis zu den Sprechstunden (FR), name: hoursNote, widget: text }

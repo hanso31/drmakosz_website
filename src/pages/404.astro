@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import { useTranslations, localePath, getLangFromUrl } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+<Base title={t('notfound.title')} description={t('notfound.text')}>
+  <div class="container section prose">
+    <h1>{t('notfound.title')}</h1>
+    <p>{t('notfound.text')}</p>
+    <p><a class="button" href={localePath(lang, '/')}>{t('notfound.back')}</a></p>
+  </div>
+</Base>

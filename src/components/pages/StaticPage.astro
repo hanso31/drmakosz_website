@@ -1,0 +1,26 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../Hero.astro';
+import { getEntry, render } from 'astro:content';
+import type { Lang } from '../../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  pageId: 'ueber-uns' | 'impressum' | 'datenschutz' | 'bildquellen';
+}
+
+const { lang, pageId } = Astro.props;
+const page = await getEntry('pages', `${lang}/${pageId}`);
+if (!page) throw new Error(`Seite fehlt: ${lang}/${pageId}`);
+const { Content } = await render(page);
+---
+<Base title={page.data.title} description={page.data.description}>
+  {page.data.heroImage
+    ? <Hero title={page.data.title} image={page.data.heroImage} imageAlt={page.data.heroAlt} />
+    : <div class="container section"><h1>{page.data.title}</h1></div>}
+  <div class="container section">
+    <div class="prose">
+      <Content />
+    </div>
+  </div>
+</Base>

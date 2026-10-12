@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../Hero.astro';
+import ContactForm from '../ContactForm.astro';
+import { getEntry, render } from 'astro:content';
+import { useTranslations, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const page = await getEntry('pages', `${lang}/kontakt`);
+if (!page) throw new Error(`Kontakt-Seite fehlt für Sprache ${lang}`);
+const settings = await getEntry('settings', lang);
+const { Content } = await render(page);
+---
+<Base title={page.data.title} description={page.data.description}>
+  <Hero title={page.data.title} image={page.data.heroImage} imageAlt={page.data.heroAlt} />
+
+  <div class="container section">
+    <div class="info-grid">
+      {settings && (
+        <div class="info-box">
+          <h2>{t('footer.contact.title')}</h2>
+          <address>
+            <strong>{settings.data.doctorName}</strong><br />
+            {settings.data.specialty}<br />
+            {settings.data.street}<br />
+            {settings.data.zipCity}
+          </address>
+          <dl>
+            <dt>Tel.</dt>
+            <dd><a href={`tel:${settings.data.phone.replace(/\s/g, '')}`}>{settings.data.phone}</a></dd>
+            <dt>Mobil</dt>
+            <dd><a href={`tel:${settings.data.phoneMobile.replace(/\s/g, '')}`}>{settings.data.phoneMobile}</a></dd>
+            <dt>E-Mail</dt>
+            <dd><a href={`mailto:${settings.data.email}`}>{settings.data.email}</a></dd>
+          </dl>
+        </div>
+      )}
+
+      <div class="info-box prose">
+        <h2>{t('contact.directions.title')}</h2>
+        <Content />
+      </div>
+    </div>
+
+    {page.data.heroImage && (
+      <img src={page.data.heroImage} alt={page.data.heroAlt ?? ''} width="1200" height="800" loading="lazy" style="border-radius: var(--radius); margin-block: 1rem 3rem;" />
+    )}
+
+    <ContactForm lang={lang} />
+  </div>
+</Base>

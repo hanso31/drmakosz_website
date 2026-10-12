@@ -1,0 +1,61 @@
+---
+import { useTranslations, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+// Formspree-Endpoint: nach dem Anlegen des Formulars unter https://formspree.io
+// hier die eigene Form-ID eintragen (siehe README → Pflegeanleitung).
+const formspreeId = 'DEINE_FORM_ID';
+---
+<form class="form" action={`https://formspree.io/f/${formspreeId}`} method="POST" data-contact-form>
+  <h2>{t('contact.form.title')}</h2>
+
+  <label for="cf-name">{t('contact.form.name')}</label>
+  <input id="cf-name" name="name" type="text" required autocomplete="name" />
+
+  <label for="cf-email">{t('contact.form.email')}</label>
+  <input id="cf-email" name="email" type="email" required autocomplete="email" />
+
+  <label for="cf-phone">{t('contact.form.phone')}</label>
+  <input id="cf-phone" name="phone" type="tel" autocomplete="tel" />
+
+  <label for="cf-message">{t('contact.form.message')}</label>
+  <textarea id="cf-message" name="message" required></textarea>
+
+  <p class="form__hint">{t('contact.form.privacy')}</p>
+  <button class="button" type="submit">{t('contact.form.submit')}</button>
+  <p class="form-status form-status--ok" data-status-ok hidden>{t('contact.form.success')}</p>
+  <p class="form-status form-status--error" data-status-error hidden>{t('contact.form.error')}</p>
+</form>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('form[data-contact-form]').forEach((form) => {
+    form.addEventListener('submit', async (event) => {
+      if (form.action.includes('DEINE_FORM_ID')) return; // Endpoint noch nicht konfiguriert → Standard-Submit
+      event.preventDefault();
+      const ok = form.querySelector<HTMLElement>('[data-status-ok]');
+      const error = form.querySelector<HTMLElement>('[data-status-error]');
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+        if (res.ok) {
+          form.reset();
+          ok?.removeAttribute('hidden');
+          error?.setAttribute('hidden', '');
+        } else {
+          throw new Error('submit failed');
+        }
+      } catch {
+        error?.removeAttribute('hidden');
+        ok?.setAttribute('hidden', '');
+      }
+    });
+  });
+</script>

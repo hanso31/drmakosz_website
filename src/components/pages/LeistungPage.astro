@@ -1,0 +1,80 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../Hero.astro';
+import { getCollection, getEntry, render } from 'astro:content';
+import { useTranslations, localePath, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  category: 'erkrankungen' | 'schoenheit';
+  // Für die Detailansicht: gesetzter Eintrag; für die Übersicht: undefined
+  slug?: string;
+}
+
+const { lang, category, slug } = Astro.props;
+const t = useTranslations(lang);
+const slugOf = (id: string) => id.split('/').pop();
+
+let detail = null;
+let DetailContent = null;
+if (slug) {
+  const list = await getCollection('leistungen', ({ id, data }) => data.lang === lang && slugOf(id) === slug);
+  detail = list[0] ?? null;
+  if (detail) {
+    const rendered = await render(detail);
+    DetailContent = rendered.Content;
+  }
+}
+
+const items = (await getCollection('leistungen', ({ data }) => data.lang === lang && data.category === category))
+  .sort((a, b) => a.data.order - b.data.order);
+
+const overview = await getEntry('pages', `${lang}/${category}`);
+const OverviewContent = overview ? (await render(overview)).Content : null;
+
+const overviewTitle = overview?.data.title ?? t(`category.${category}`);
+---
+<Base
+  title={detail ? detail.data.title : overviewTitle}
+  description={detail ? detail.data.description : overviewTitle}
+  image={detail?.data.heroImage}
+>
+  {detail ? (
+    <>
+      <Hero title={detail.data.title} subtitle={detail.data.description} image={detail.data.heroImage} imageAlt={detail.data.heroAlt} />
+      <div class="container section">
+        <div class="prose">
+          {DetailContent && <DetailContent />}
+        </div>
+      </div>
+    </>
+  ) : (
+    <>
+      {overview?.data.heroImage ? (
+        <Hero title={overviewTitle} subtitle={overview.data.description} image={overview.data.heroImage} imageAlt={overview.data.heroAlt} />
+      ) : (
+        <div class="container section">
+          <h1>{overviewTitle}</h1>
+        </div>
+      )}
+      <div class="container" style="padding-bottom: 3rem;">
+        {OverviewContent && (
+          <div class="prose" style="margin-bottom: 2.5rem;">
+            <OverviewContent />
+          </div>
+        )}
+        <div class="card-grid">
+          {items.map((l) => (
+            <a class="card" href={localePath(lang, `/${category}/${slugOf(l.id)}/`)}>
+              {l.data.heroImage && <img src={l.data.heroImage} alt={l.data.heroAlt ?? ''} loading="lazy" width="1200" height="446" />}
+              <div class="card__body">
+                <h3 class="card__title">{l.data.title}</h3>
+                <p class="card__text">{l.data.description}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </>
+  )}
+</Base>

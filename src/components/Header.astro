@@ -1,0 +1,207 @@
+---
+import { useTranslations, localePath, stripLangFromPath, languages, type Lang } from '../i18n/utils';
+import { getCollection } from 'astro:content';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const currentPath = stripLangFromPath(Astro.url.pathname);
+
+const erkrankungen = (await getCollection('leistungen', ({ data }) => data.lang === lang && data.category === 'erkrankungen'))
+  .sort((a, b) => a.data.order - b.data.order);
+const schoenheit = (await getCollection('leistungen', ({ data }) => data.lang === lang && data.category === 'schoenheit'))
+  .sort((a, b) => a.data.order - b.data.order);
+
+const slugOf = (id: string) => id.split('/').pop();
+
+const navItem = (path: string, label: string) => {
+  const href = localePath(lang, path);
+  const active = currentPath === path || currentPath.startsWith(path + '/');
+  return { href, label, active };
+};
+---
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a href={localePath(lang, '/')} class="site-header__logo" aria-label="Dermatologe Basel – Startseite">
+      <img src="/images/logo.svg" alt="" width="250" height="64" />
+    </a>
+
+    <button class="site-header__burger" aria-expanded="false" aria-controls="mainnav" aria-label={t('nav.menu.open')}>
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav id="mainnav" class="site-nav" aria-label="Hauptnavigation">
+      <ul class="site-nav__list">
+        <li><a {...navItem('/', t('nav.home'))} aria-current={currentPath === '/' ? 'page' : undefined}>{t('nav.home')}</a></li>
+        <li><a href={localePath(lang, '/ueber-uns/')} aria-current={currentPath.startsWith('/ueber-uns') ? 'page' : undefined}>{t('nav.about')}</a></li>
+        <li class="has-dropdown">
+          <a href={localePath(lang, '/erkrankungen/')} aria-current={currentPath.startsWith('/erkrankungen') ? 'page' : undefined}>{t('nav.erkrankungen')}</a>
+          <ul class="dropdown">
+            {erkrankungen.map((l) => (
+              <li><a href={localePath(lang, `/erkrankungen/${slugOf(l.id)}/`)}>{l.data.title}</a></li>
+            ))}
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <a href={localePath(lang, '/schoenheit/')} aria-current={currentPath.startsWith('/schoenheit') ? 'page' : undefined}>{t('nav.schoenheit')}</a>
+          <ul class="dropdown">
+            {schoenheit.map((l) => (
+              <li><a href={localePath(lang, `/schoenheit/${slugOf(l.id)}/`)}>{l.data.title}</a></li>
+            ))}
+          </ul>
+        </li>
+        <li><a href={localePath(lang, '/kontakt/')} aria-current={currentPath.startsWith('/kontakt') ? 'page' : undefined}>{t('nav.contact')}</a></li>
+      </ul>
+
+      <ul class="site-nav__langs" aria-label={t('nav.language')}>
+        {(Object.keys(languages) as Lang[]).map((l) => (
+          <li>
+            {l === lang
+              ? <span aria-current="true">{l.toUpperCase()}</span>
+              : <a href={localePath(l, currentPath)} hreflang={l}>{l.toUpperCase()}</a>}
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    background: var(--color-weiss);
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.6rem;
+  }
+  .site-header__logo img { height: 44px; width: auto; }
+
+  .site-header__burger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    padding: 0.6rem;
+    cursor: pointer;
+  }
+  .site-header__burger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--color-braun);
+  }
+
+  .site-nav { display: flex; align-items: center; gap: 1.5rem; }
+  .site-nav__list {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .site-nav__list > li > a {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--color-braun);
+    text-decoration: none;
+    padding: 0.4rem 0.2rem;
+    border-bottom: 2px solid transparent;
+  }
+  .site-nav__list > li > a:hover { color: var(--color-blau-dunkel); }
+  .site-nav__list > li > a[aria-current="page"] { border-bottom-color: var(--color-blau); }
+
+  .has-dropdown { position: relative; }
+  .dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 14rem;
+    background: var(--color-weiss);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 0;
+    display: none;
+  }
+  .has-dropdown:hover .dropdown,
+  .has-dropdown:focus-within .dropdown { display: block; }
+  .dropdown a {
+    display: block;
+    padding: 0.45rem 1.1rem;
+    color: var(--color-text);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .dropdown a:hover { background: var(--color-bg-alt); color: var(--color-blau-dunkel); }
+
+  .site-nav__langs {
+    display: flex;
+    gap: 0.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .site-nav__langs a { color: var(--color-text-muted); text-decoration: none; }
+  .site-nav__langs a:hover { color: var(--color-blau-dunkel); }
+  .site-nav__langs span { color: var(--color-braun); border-bottom: 2px solid var(--color-blau); }
+  .site-nav__langs li + li::before { content: '·'; margin-right: 0.4rem; color: var(--color-border); }
+
+  @media (max-width: 56rem) {
+    .site-header__burger { display: flex; }
+    .site-nav {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--color-weiss);
+      border-bottom: 1px solid var(--color-border);
+      flex-direction: column;
+      align-items: stretch;
+      padding: 1rem 1.25rem 1.5rem;
+      display: none;
+    }
+    .site-nav[data-open] { display: flex; }
+    .site-nav__list { flex-direction: column; align-items: stretch; gap: 0; }
+    .site-nav__list > li > a { display: block; padding: 0.7rem 0; }
+    .dropdown {
+      position: static;
+      display: block;
+      border: none;
+      box-shadow: none;
+      padding-left: 1rem;
+    }
+    .dropdown a { padding: 0.4rem 0; white-space: normal; }
+    .site-nav__langs { padding-top: 1rem; }
+  }
+</style>
+
+<script>
+  const burger = document.querySelector('.site-header__burger');
+  const nav = document.getElementById('mainnav');
+  burger?.addEventListener('click', () => {
+    const open = nav?.hasAttribute('data-open');
+    if (open) {
+      nav?.removeAttribute('data-open');
+      burger.setAttribute('aria-expanded', 'false');
+    } else {
+      nav?.setAttribute('data-open', '');
+      burger.setAttribute('aria-expanded', 'true');
+    }
+  });
+</script>

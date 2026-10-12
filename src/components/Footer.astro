@@ -1,0 +1,100 @@
+---
+import { useTranslations, localePath, type Lang } from '../i18n/utils';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  lang: Lang;
+  settings: CollectionEntry<'settings'> | undefined;
+}
+
+const { lang, settings } = Astro.props;
+const t = useTranslations(lang);
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    {settings && (
+      <>
+        <section>
+          <h2>{t('footer.hours.title')}</h2>
+          <ul class="site-footer__hours">
+            {settings.data.hours.map((h) => (
+              <li>
+                <span>{h.days}</span>
+                <span>{h.time}</span>
+              </li>
+            ))}
+          </ul>
+          <p class="site-footer__note">{settings.data.hoursNote}</p>
+        </section>
+
+        <section>
+          <h2>{t('footer.contact.title')}</h2>
+          <address>
+            <strong>{settings.data.doctorName}</strong><br />
+            {settings.data.specialty}<br />
+            {settings.data.street}<br />
+            {settings.data.zipCity}
+          </address>
+          <p>
+            <a href={`tel:${settings.data.phone.replace(/\s/g, '')}`}>{settings.data.phone}</a><br />
+            <a href={`tel:${settings.data.phoneMobile.replace(/\s/g, '')}`}>{settings.data.phoneMobile}</a><br />
+            <a href={`mailto:${settings.data.email}`}>{settings.data.email}</a>
+          </p>
+          <p><a href={localePath(lang, '/kontakt/')}>{t('footer.directions')}</a></p>
+        </section>
+      </>
+    )}
+  </div>
+  <div class="container site-footer__legal">
+    <p>© {year} {t('footer.copyright')}</p>
+    <nav aria-label="Rechtliches">
+      <a href={localePath(lang, '/impressum/')}>{t('footer.legal.impressum')}</a>
+      <a href={localePath(lang, '/datenschutz/')}>{t('footer.legal.datenschutz')}</a>
+      <a href={localePath(lang, '/bildquellen/')}>{t('footer.legal.bildquellen')}</a>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-braun);
+    color: var(--color-weiss);
+    margin-top: auto;
+  }
+  .site-footer a { color: var(--color-beige); }
+  .site-footer a:hover { color: var(--color-weiss); }
+  .site-footer__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+    gap: 2.5rem;
+    padding-block: 3rem 2rem;
+  }
+  .site-footer h2 {
+    color: var(--color-weiss);
+    font-size: 1.15rem;
+    margin-top: 0;
+  }
+  .site-footer address { font-style: normal; line-height: 1.7; }
+  .site-footer__hours { list-style: none; margin: 0; padding: 0; }
+  .site-footer__hours li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: 22rem;
+    padding-block: 0.15rem;
+  }
+  .site-footer__note { font-size: 0.9rem; opacity: 0.85; max-width: 26rem; }
+  .site-footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-block: 1.25rem;
+    font-size: 0.9rem;
+  }
+  .site-footer__legal p { margin: 0; }
+  .site-footer__legal nav { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+</style>

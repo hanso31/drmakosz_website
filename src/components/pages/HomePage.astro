@@ -1,0 +1,64 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../Hero.astro';
+import { getEntry, getCollection } from 'astro:content';
+import { render } from 'astro:content';
+import { useTranslations, localePath, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const page = await getEntry('pages', `${lang}/home`);
+if (!page) throw new Error(`Home-Seite fehlt für Sprache ${lang}`);
+const { Content } = await render(page);
+
+const slugOf = (id: string) => id.split('/').pop();
+const byCategory = (cat: 'erkrankungen' | 'schoenheit') =>
+  getCollection('leistungen', ({ data }) => data.lang === lang && data.category === cat)
+    .then((list) => list.sort((a, b) => a.data.order - b.data.order));
+
+const erkrankungen = await byCategory('erkrankungen');
+const schoenheit = await byCategory('schoenheit');
+---
+<Base title={page.data.title} description={page.data.description} image={page.data.heroImage}>
+  <Hero title={page.data.title} subtitle={page.data.description} image={page.data.heroImage} imageAlt={page.data.heroAlt} />
+
+  <div class="container section">
+    <div class="prose">
+      <Content />
+    </div>
+  </div>
+
+  <div class="section section--alt">
+    <div class="container">
+      <h2>{t('home.leistungen.erkrankungen')}</h2>
+      <div class="card-grid">
+        {erkrankungen.map((l) => (
+          <a class="card" href={localePath(lang, `/erkrankungen/${slugOf(l.id)}/`)}>
+            {l.data.heroImage && <img src={l.data.heroImage} alt={l.data.heroAlt ?? ''} loading="lazy" width="1200" height="446" />}
+            <div class="card__body">
+              <h3 class="card__title">{l.data.title}</h3>
+              <p class="card__text">{l.data.description}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <h2>{t('home.leistungen.schoenheit')}</h2>
+      <div class="card-grid">
+        {schoenheit.map((l) => (
+          <a class="card" href={localePath(lang, `/schoenheit/${slugOf(l.id)}/`)}>
+            {l.data.heroImage && <img src={l.data.heroImage} alt={l.data.heroAlt ?? ''} loading="lazy" width="1200" height="446" />}
+            <div class="card__body">
+              <h3 class="card__title">{l.data.title}</h3>
+              <p class="card__text">{l.data.description}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</Base>

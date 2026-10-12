@@ -1,0 +1,12 @@
+---
+import LeistungPage from '../../../components/pages/LeistungPage.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const items = await getCollection('leistungen', ({ data }) => data.lang === 'en' && data.category === 'erkrankungen');
+  return items.map((item) => ({ params: { slug: item.id.split('/').pop() } }));
+}
+
+const { slug } = Astro.params;
+---
+<LeistungPage lang="en" category="erkrankungen" slug={slug} />

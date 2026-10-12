@@ -1,0 +1,24 @@
+# Weiterleitungen alter URLs (WordPress) auf die neue Struktur – Cloudflare Pages
+/hautkrankheiten/        /erkrankungen/ 301
+/akne/                   /erkrankungen/akne/ 301
+/allergie/               /erkrankungen/allergie/ 301
+/haemorrhoiden/          /erkrankungen/haemorrhoiden/ 301
+/hauttumoren/            /erkrankungen/hauttumoren/ 301
+/krampfadern/            /erkrankungen/krampfadern/ 301
+/mykosen/                /erkrankungen/mykosen/ 301
+/schuppenflechte/        /erkrankungen/schuppenflechte/ 301
+/warzen/                 /erkrankungen/warzen/ 301
+/falten/                 /schoenheit/falten/ 301
+/body-sculpting/         /schoenheit/body-sculpting/ 301
+/lasertherapie/          /schoenheit/lasertherapie/ 301
+/mesotherapie/           /schoenheit/mesotherapie/ 301
+/aquafacial/             /schoenheit/aquafacial/ 301
+/prophilo/               /schoenheit/prophilo/ 301
+/vitamin-infusion/       /schoenheit/vitamin-infusion/ 301
+/exosomen/               /schoenheit/exosomen/ 301
+/muttermale/             /schoenheit/muttermale/ 301
+/pigmentstoerung/        /schoenheit/pigmentstoerung/ 301
+/haare/                  /schoenheit/haare/ 301
+/kosmetik/               /schoenheit/kosmetik/ 301
+/naegel/                 /schoenheit/naegel/ 301
+/augenbrauen-und-wimpernlifting/ /schoenheit/augenbrauen-und-wimpernlifting/ 301
